@@ -6,6 +6,8 @@ export interface SiteData {
   socialLinks: {
     github: string | null;
     linkedin: string | null;
+    instagram: string | null;
+    threads: string | null;
   };
   contactEmail: string | null;
   whatsappNumber: string | null;
@@ -18,10 +20,12 @@ export const site: SiteData = {
   language: 'en',
   url: null,
   socialLinks: {
-    github: null,
-    linkedin: null,
+    github: 'https://github.com/ridhopujiono',
+    linkedin: 'https://www.linkedin.com/in/ridho-pujiono/',
+    instagram: 'https://instagram.com/ridhopujiono_',
+    threads: 'https://www.threads.com/@ridhopujiono_',
   },
-  contactEmail: null,
-  whatsappNumber: null,
+  contactEmail: 'ridhopujiono.work@gmail.com',
+  whatsappNumber: '6282257802227',
   cvPath: null,
 };
