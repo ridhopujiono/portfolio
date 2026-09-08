@@ -1,0 +1,137 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Appearance {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'default' | 'small';
+}
+
+type LinkProps = Appearance & Omit<HTMLAttributes<'a'>, 'href' | 'aria-disabled'> & {
+  href: string;
+  disabled?: never;
+  'aria-disabled'?: never;
+};
+
+type ActionProps = Appearance & HTMLAttributes<'button'> & {
+  href?: never;
+};
+
+type Props = LinkProps | ActionProps;
+
+const { href, variant = 'primary', size = 'default', class: className, ...attributes } = Astro.props;
+const isLink = href !== undefined;
+
+if (isLink) {
+  // Catch invalid values even when this component is called from untyped content.
+  const destination = typeof href === 'string' ? href.trim() : '';
+  const normalizedProtocol = destination.replace(/[\u0000-\u0020]/g, '');
+  if (!destination || /^#!?$/.test(destination) || /^(?:javascript|data|vbscript):/i.test(normalizedProtocol)) {
+    throw new Error('Button navigation requires a real URL or a named fragment target.');
+  }
+  if ('disabled' in attributes || 'aria-disabled' in attributes) {
+    throw new Error('Use a native disabled button for an unavailable action; links must remain navigable.');
+  }
+}
+
+const classes = ['button', 'type-small', `button--${variant}`, `button--${size}`, className];
+const actionAttributes = !isLink ? attributes as HTMLAttributes<'button'> : undefined;
+const linkAttributes = isLink ? attributes as HTMLAttributes<'a'> : undefined;
+---
+
+{
+  isLink ? (
+    <a {...linkAttributes} href={href} class:list={classes}>
+      {Astro.slots.has('icon') && <span class="button__icon" aria-hidden="true"><slot name="icon" /></span>}
+      <span class="button__label"><slot /></span>
+    </a>
+  ) : (
+    <button {...actionAttributes} type={actionAttributes?.type ?? 'button'} class:list={classes}>
+      {Astro.slots.has('icon') && <span class="button__icon" aria-hidden="true"><slot name="icon" /></span>}
+      <span class="button__label"><slot /></span>
+    </button>
+  )
+}
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--spacing) * 2);
+    max-inline-size: 100%;
+    min-block-size: calc(var(--spacing) * 11);
+    padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 5);
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .button--small {
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+  }
+
+  .button--primary {
+    background-color: var(--color-accent-strong);
+    color: var(--color-on-accent);
+  }
+
+  .button--secondary {
+    border-color: var(--color-border-interactive);
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+  }
+
+  .button--ghost {
+    background-color: transparent;
+    color: var(--color-accent);
+  }
+
+  @media (hover: hover) {
+    .button--primary:hover:not(:disabled) {
+      background-color: var(--color-action-primary-hover);
+    }
+
+    .button--secondary:hover:not(:disabled) {
+      border-color: var(--color-accent);
+      background-color: var(--color-surface-elevated);
+    }
+
+    .button--ghost:hover:not(:disabled) {
+      background-color: var(--color-surface-elevated);
+      color: var(--color-text-primary);
+    }
+  }
+
+  .button:disabled {
+    border-color: var(--color-border-subtle);
+    background-color: var(--color-surface-elevated);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  .button__label {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .button__icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    inline-size: calc(var(--spacing) * 4);
+    block-size: calc(var(--spacing) * 4);
+  }
+
+  .button__icon :global(svg) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+</style>

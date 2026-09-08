@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'header'>, 'id' | 'title'> {
+  id: string;
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  level?: 'h1' | 'h2' | 'h3';
+}
+
+const {
+  id,
+  title,
+  description,
+  eyebrow,
+  level: Heading = 'h2',
+  class: className,
+  ...attributes
+} = Astro.props;
+---
+
+<header {...attributes} class:list={['section-heading', className]}>
+  {eyebrow && <p class="type-eyebrow section-heading__eyebrow">{eyebrow}</p>}
+  <Heading id={id} class:list={[`type-${Heading}`, 'section-heading__title']}>{title}</Heading>
+  {description && <p class="type-body section-heading__description">{description}</p>}
+</header>
+
+<style>
+  .section-heading {
+    display: grid;
+    gap: calc(var(--spacing) * 3);
+    min-inline-size: 0;
+  }
+
+  .section-heading__eyebrow {
+    color: var(--color-accent);
+  }
+
+  .section-heading__title {
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .section-heading__description {
+    max-inline-size: var(--container-prose);
+    color: var(--color-text-secondary);
+  }
+</style>

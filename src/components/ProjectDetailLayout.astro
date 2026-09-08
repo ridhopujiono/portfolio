@@ -1,0 +1,334 @@
+---
+import Container from './Container.astro';
+import Section from './Section.astro';
+import Badge from './Badge.astro';
+import { withBase } from '../lib/urls';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+  headings: { depth: number; slug: string; text: string }[];
+  meta: {
+    type: string;
+    company?: string;
+    client?: string;
+    role: string;
+    status: string;
+    periods?: { label: string; period: string }[];
+  };
+}
+
+const { project, headings, meta } = Astro.props;
+const { data } = project;
+
+const h2Headings = headings.filter(h => h.depth === 2);
+---
+
+<Section class="project-detail">
+  <Container>
+    <div class="project-detail__breadcrumb type-small">
+      <a href={withBase('/')}>Home</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <a href={withBase('/projects/')}>Projects</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">{data.title}</span>
+    </div>
+
+    <header class="project-detail__header">
+      <h1 class="type-display project-detail__title">{data.title}</h1>
+      <p class="type-body project-detail__summary">{data.summary}</p>
+    </header>
+
+    <div class="project-detail__layout">
+      <div class="project-detail__metadata-area">
+        <div class="metadata-grid">
+          <div class="metadata-item">
+            <h3 class="type-small metadata-label">Project Type</h3>
+            <p class="type-body metadata-value">{meta.type}</p>
+          </div>
+          
+          {meta.company && (
+            <div class="metadata-item">
+              <h3 class="type-small metadata-label">Company</h3>
+              <p class="type-body metadata-value">{meta.company}</p>
+            </div>
+          )}
+
+          {meta.client && (
+            <div class="metadata-item">
+              <h3 class="type-small metadata-label">Client</h3>
+              <p class="type-body metadata-value">{meta.client}</p>
+            </div>
+          )}
+
+          {meta.role && (
+            <div class="metadata-item">
+              <h3 class="type-small metadata-label">Role</h3>
+              <p class="type-body metadata-value">{meta.role}</p>
+            </div>
+          )}
+
+          <div class="metadata-item">
+            <h3 class="type-small metadata-label">System Status</h3>
+            <p class="type-body metadata-value">{meta.status}</p>
+          </div>
+          
+          {meta.periods && meta.periods.map(p => (
+            <div class="metadata-item">
+              <h3 class="type-small metadata-label">{p.label}</h3>
+              <p class="type-body metadata-value">{p.period}</p>
+            </div>
+          ))}
+
+          {data.technologies.length > 0 && (
+            <div class="metadata-item metadata-item--full">
+              <h3 class="type-small metadata-label">Technologies</h3>
+              <ul class="metadata-tech-list" role="list">
+                {data.technologies.map(tech => (
+                  <li><Badge>{tech}</Badge></li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div class="project-detail__content-area">
+        {h2Headings.length > 0 && (
+          <nav class="toc" aria-label="Table of Contents">
+            <h2 class="type-small toc-heading">In this case study</h2>
+            <ul class="toc-list type-body" role="list">
+              {h2Headings.map(heading => (
+                <li>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        <div class="markdown-content">
+          <slot />
+        </div>
+        
+        <div class="project-detail__footer">
+          <a href={withBase('/projects/')} class="back-link type-body">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Back to projects
+          </a>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .project-detail {
+    padding-block-start: calc(var(--spacing) * 6);
+    padding-block-end: calc(var(--spacing) * 20);
+  }
+
+  .project-detail__breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+    margin-block-end: calc(var(--spacing) * 8);
+    color: var(--color-text-muted);
+  }
+
+  .project-detail__breadcrumb a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .project-detail__breadcrumb a:hover {
+    color: var(--color-text-primary);
+  }
+
+  .project-detail__breadcrumb .current {
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  .project-detail__header {
+    margin-block-end: calc(var(--spacing) * 12);
+  }
+
+  .project-detail__title {
+    color: var(--color-text-primary);
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+
+  .project-detail__summary {
+    color: var(--color-text-secondary);
+    max-inline-size: 65ch;
+  }
+
+  .project-detail__layout {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 12);
+  }
+
+  .metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(var(--spacing) * 6);
+    padding: calc(var(--spacing) * 6);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-surface);
+  }
+
+  .metadata-item {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 1);
+  }
+  
+  .metadata-item--full {
+    grid-column: 1 / -1;
+    margin-block-start: calc(var(--spacing) * 4);
+  }
+
+  .metadata-label {
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .metadata-value {
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  .metadata-tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 2);
+    margin-block-start: calc(var(--spacing) * 2);
+  }
+
+  .toc {
+    margin-block-end: calc(var(--spacing) * 10);
+    padding: calc(var(--spacing) * 6);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-surface);
+  }
+
+  .toc-heading {
+    margin-block-end: calc(var(--spacing) * 4);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .toc-list a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .toc-list a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .project-detail__content-area {
+    min-inline-size: 0;
+  }
+
+  .markdown-content {
+    max-inline-size: 65ch;
+  }
+
+  .markdown-content :global(h2) {
+    font-size: var(--text-h2);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-block-start: calc(var(--spacing) * 12);
+    margin-block-end: calc(var(--spacing) * 4);
+    scroll-margin-top: calc(var(--site-header-height, 4rem) + 2rem);
+  }
+
+  .markdown-content :global(h3) {
+    font-size: var(--text-h3);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-block-start: calc(var(--spacing) * 8);
+    margin-block-end: calc(var(--spacing) * 3);
+    scroll-margin-top: calc(var(--site-header-height, 4rem) + 2rem);
+  }
+
+  .markdown-content :global(p) {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+  
+  .markdown-content :global(ul) {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-block-end: calc(var(--spacing) * 4);
+    padding-inline-start: calc(var(--spacing) * 6);
+  }
+
+  .markdown-content :global(li) {
+    margin-block-end: calc(var(--spacing) * 2);
+  }
+  
+  .project-detail__footer {
+    margin-block-start: calc(var(--spacing) * 16);
+    padding-block-start: calc(var(--spacing) * 8);
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+    color: var(--color-text-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .back-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @media (min-width: 64rem) {
+    .project-detail__layout {
+      flex-direction: row-reverse;
+      align-items: flex-start;
+    }
+
+    .project-detail__metadata-area {
+      flex: 1 1 35%;
+      position: sticky;
+      top: calc(var(--site-header-height, 4rem) + 2rem);
+    }
+    
+    .metadata-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-detail__content-area {
+      flex: 1 1 65%;
+    }
+  }
+</style>

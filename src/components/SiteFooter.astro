@@ -1,0 +1,149 @@
+---
+import { site } from '../data/site';
+import { navigation } from '../data/navigation';
+import Container from './Container.astro';
+import { getPublicCvUrl } from '../lib/public-assets';
+
+const currentYear = new Date().getFullYear();
+const { socialLinks } = site;
+const hasSocial = Boolean(socialLinks.github || socialLinks.linkedin);
+const cvUrl = getPublicCvUrl(site.cvPath);
+---
+
+<footer class="site-footer" role="contentinfo">
+  <Container>
+    <div class="footer-layout">
+      <div class="footer-brand">
+        <span class="type-body font-semibold text-text-primary">{site.name}</span>
+        <p class="type-small text-text-secondary mt-2 max-w-sm">
+          Software engineer working across backend, web, and mobile.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <nav aria-label="Footer navigation" class="footer-nav">
+          <h2 class="type-eyebrow text-text-muted mb-4">Navigation</h2>
+          <ul class="footer-list" role="list">
+            {navigation.map((item) => (
+              <li>
+                <a href={item.href} class="type-small footer-link">{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {(hasSocial || cvUrl) && (
+          <div class="footer-social">
+            <h2 class="type-eyebrow text-text-muted mb-4">Connect</h2>
+            <ul class="footer-list" role="list">
+              {cvUrl && (
+                <li>
+                  <a href={cvUrl} download class="type-small footer-link">Download CV (PDF)</a>
+                </li>
+              )}
+              {socialLinks.github && (
+                <li>
+                  <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" class="type-small footer-link">GitHub</a>
+                </li>
+              )}
+              {socialLinks.linkedin && (
+                <li>
+                  <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="type-small footer-link">LinkedIn</a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="type-small text-text-muted">
+        &copy; {currentYear} {site.name}. All rights reserved.
+      </p>
+      <p class="type-small text-text-muted">
+        Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="footer-link">Astro</a>
+      </p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .site-footer {
+    border-block-start: 1px solid var(--color-border-subtle);
+    padding-block-start: calc(var(--spacing) * 12);
+    padding-block-end: calc(var(--spacing) * 8);
+    background-color: var(--color-background);
+  }
+
+  .footer-layout {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 10);
+    margin-block-end: calc(var(--spacing) * 12);
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .max-w-sm {
+    max-inline-size: 24rem;
+  }
+  
+  .mt-2 {
+    margin-block-start: calc(var(--spacing) * 2);
+  }
+
+  .mb-4 {
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+
+  .footer-links-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 12);
+  }
+
+  .footer-nav, .footer-social {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 8rem;
+  }
+
+  .footer-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 3);
+  }
+
+  .footer-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-link:hover, .footer-link:focus-visible {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--spacing) * 4);
+    padding-block-start: calc(var(--spacing) * 8);
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  @media (min-width: 48rem) {
+    .footer-layout {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>

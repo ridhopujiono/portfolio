@@ -1,0 +1,65 @@
+---
+import Container from './Container.astro';
+import Section from './Section.astro';
+import SectionHeading from './SectionHeading.astro';
+import Surface from './Surface.astro';
+import Badge from './Badge.astro';
+import { skills, skillsHeading } from '../data/skills';
+---
+
+<Section id="skills" tabindex="-1" aria-labelledby="skills-heading" class="border-t border-border-subtle">
+  <Container>
+    <SectionHeading id="skills-heading" title={skillsHeading} level="h2" />
+    
+    <div class="skills__grid">
+      {skills.map(group => (
+        <Surface class="skills__card">
+          <h3 class="type-h3 skills__group-name">{group.name}</h3>
+          <p class="type-body skills__context">{group.context}</p>
+          <ul class="skills__list" role="list">
+            {group.items.map(item => (
+              <li><Badge variant="neutral">{item}</Badge></li>
+            ))}
+          </ul>
+        </Surface>
+      ))}
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .skills__grid {
+    display: grid;
+    gap: calc(var(--spacing) * 6);
+    margin-block-start: calc(var(--spacing) * 10);
+  }
+
+  .skills__card {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing) * 6);
+  }
+
+  .skills__group-name {
+    margin-block-end: calc(var(--spacing) * 2);
+    color: var(--color-text-primary);
+  }
+
+  .skills__context {
+    margin-block-end: calc(var(--spacing) * 6);
+    color: var(--color-text-secondary);
+  }
+
+  .skills__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 2);
+    margin-block-start: auto;
+  }
+
+  @media (min-width: 48rem) {
+    .skills__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

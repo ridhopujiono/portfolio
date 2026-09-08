@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const allProjects = await getCollection('projects');
+const draftProjects = allProjects.filter(p => p.data.publicationStatus === 'draft' || !p.data.detailPageReady);
+---
+
+<BaseLayout title="Draft Projects Preview" description="Draft preview — not included in production." noindex={true}>
+  <Section class="projects-preview">
+    <Container>
+      <div class="projects-preview__header">
+        <h1 class="type-display projects-preview__title">Draft Projects Preview</h1>
+        <p class="type-body projects-preview__description">
+          <strong class="text-accent">Draft preview — not included in production.</strong><br/>
+          These projects are either marked as drafts or do not have their detail pages ready yet.
+        </p>
+      </div>
+
+      {draftProjects.length > 0 ? (
+        <div class="projects-preview__grid">
+          {draftProjects.map((project) => (
+            <div class="projects-preview__card-wrapper">
+              <ProjectCard project={project} headingLevel="h2" />
+              <div class="projects-preview__card-actions mt-4">
+                <a href={`/dev/projects/${project.id}/`} class="type-body font-medium text-accent hover:underline">Preview case study &rarr;</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="type-body text-text-muted mt-8">No draft projects available.</p>
+      )}
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  .projects-preview {
+    padding-block-start: calc(var(--spacing) * 12);
+    padding-block-end: calc(var(--spacing) * 20);
+  }
+
+  .projects-preview__header {
+    margin-block-end: calc(var(--spacing) * 12);
+  }
+
+  .projects-preview__title {
+    color: var(--color-text-primary);
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+
+  .projects-preview__description {
+    color: var(--color-text-secondary);
+  }
+
+  .projects-preview__grid {
+    display: grid;
+    gap: calc(var(--spacing) * 8);
+  }
+
+  @media (min-width: 48rem) {
+    .projects-preview__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .projects-preview__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

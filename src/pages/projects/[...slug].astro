@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectDetailLayout from '../../components/ProjectDetailLayout.astro';
+import { experience } from '../../data/experience';
+
+export async function getStaticPaths() {
+  const projects = await getCollection(
+    'projects',
+    ({ data }) => data.publicationStatus === 'published' && data.detailPageReady
+  );
+
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content, headings } = await render(project);
+
+const exp = experience.find(e => e.project === project.data.title);
+
+const meta = {
+  type: project.data.category === 'professional' ? 'Professional / Team project' : project.data.category,
+  company: exp?.company,
+  client: exp?.clientDescription,
+  role: project.data.roles.join(', '),
+  status: project.data.projectStatus === 'production' ? 'In production' : project.data.projectStatus,
+  periods: exp?.periods
+};
+---
+
+<BaseLayout title={`${project.data.title} — Projects`} description={project.data.summary}>
+  <ProjectDetailLayout project={project} headings={headings} meta={meta}>
+    <Content />
+  </ProjectDetailLayout>
+</BaseLayout>

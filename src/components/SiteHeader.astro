@@ -1,0 +1,271 @@
+---
+import Button from './Button.astro';
+import Container from './Container.astro';
+import { homeHref, navigation } from '../data/navigation';
+import { profile } from '../data/profile';
+---
+
+<site-header class="site-header">
+  <header>
+    <Container class="header-container">
+      <div class="identity-row">
+        <a class="site-identity" href={homeHref} data-site-identity>{profile.name}</a>
+        <Button
+          variant="secondary"
+          size="small"
+          class="navigation-toggle"
+          data-navigation-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+          hidden
+        >
+          <svg slot="icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+            <path class="menu-line menu-line--first" d="M3 10h14" />
+            <path class="menu-line menu-line--last" d="M3 10h14" />
+          </svg>
+          Menu
+        </Button>
+      </div>
+
+      <nav id="primary-navigation" aria-label="Primary navigation">
+        <ul class="navigation-links">
+          {navigation.map(({ label, href }) => {
+            const normalizedPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+            const normalizedHref = href.replace(/\/$/, '') || '/';
+            const isHomeLink = normalizedHref === (homeHref.replace(/\/$/, '') || '/');
+            
+            let isCurrent = false;
+            if (isHomeLink) {
+              isCurrent = normalizedPath === normalizedHref;
+            } else if (!href.includes('#')) {
+              isCurrent = normalizedPath.startsWith(normalizedHref);
+            }
+
+            return (
+              <li>
+                <a href={href} aria-current={isCurrent ? 'page' : undefined}>
+                  {label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </Container>
+  </header>
+</site-header>
+
+<script>
+  class SiteHeaderElement extends HTMLElement {
+    #listeners?: AbortController;
+    #heightObserver?: ResizeObserver;
+
+    connectedCallback() {
+      // Reconnecting the same element must never register another set of handlers.
+      this.#listeners?.abort();
+      this.#heightObserver?.disconnect();
+
+      const toggle = this.querySelector<HTMLButtonElement>('[data-navigation-toggle]');
+      const navigation = this.querySelector<HTMLElement>('#primary-navigation');
+      const identity = this.querySelector<HTMLAnchorElement>('[data-site-identity]');
+      if (!toggle || !navigation || !identity) return;
+
+      this.#listeners = new AbortController();
+      const { signal } = this.#listeners;
+      const desktop = window.matchMedia('(min-width: 48rem)');
+      let isOpen = false;
+
+      const measureHeader = () => {
+        document.documentElement.style.setProperty('--site-header-height', `${this.getBoundingClientRect().height}px`);
+      };
+
+      const setOpen = (nextState: boolean, returnFocus = false) => {
+        isOpen = nextState && !desktop.matches;
+        navigation.hidden = !desktop.matches && !isOpen;
+        toggle.hidden = desktop.matches;
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+        if (returnFocus && !desktop.matches) toggle.focus();
+        // Update the anchor offset before the browser follows a clicked fragment link.
+        measureHeader();
+      };
+
+      toggle.addEventListener('click', () => setOpen(!isOpen), { signal });
+
+      this.addEventListener('click', (event) => {
+        if (isOpen && event.target instanceof Element && event.target.closest('a[href]')) {
+          setOpen(false, true);
+        }
+      }, { signal });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isOpen) {
+          event.preventDefault();
+          setOpen(false, true);
+        }
+      }, { signal });
+
+      desktop.addEventListener('change', () => {
+        const focusedToggle = document.activeElement === toggle;
+        const focusedNavigation = navigation.contains(document.activeElement);
+        setOpen(false);
+        // Keep keyboard focus visible when the responsive layout hides its old control.
+        if (desktop.matches && focusedToggle) identity.focus();
+        if (!desktop.matches && focusedNavigation) toggle.focus();
+      }, { signal });
+
+      if ('ResizeObserver' in window) {
+        this.#heightObserver = new ResizeObserver(measureHeader);
+        this.#heightObserver.observe(this);
+      }
+
+      // The HTML starts with visible links and a hidden toggle. Enhance only now.
+      setOpen(false);
+    }
+
+    disconnectedCallback() {
+      this.#listeners?.abort();
+      this.#heightObserver?.disconnect();
+      document.documentElement.style.removeProperty('--site-header-height');
+    }
+  }
+
+  if (!customElements.get('site-header')) {
+    customElements.define('site-header', SiteHeaderElement);
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 40;
+    inset-block-start: 0;
+    display: block;
+    border-block-end: 1px solid var(--color-border-subtle);
+    background-color: var(--color-background);
+  }
+
+  .site-header :global(.header-container) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: calc(var(--spacing) * 8);
+  }
+
+  .identity-row {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--spacing) * 3);
+    min-inline-size: 0;
+    min-block-size: calc(var(--spacing) * 20);
+    padding-block: calc(var(--spacing) * 3);
+  }
+
+  .site-identity {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: calc(var(--spacing) * 11);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: -0.025em;
+    text-decoration: none;
+  }
+
+  .site-identity:hover {
+    color: var(--color-accent);
+  }
+
+  .site-header :global(.navigation-toggle) {
+    flex-shrink: 0;
+  }
+
+  .site-header :global([hidden]) {
+    display: none;
+  }
+
+  nav {
+    flex: 1 1 100%;
+    min-inline-size: 0;
+    padding-block: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  .navigation-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+  }
+
+  .navigation-links a {
+    display: flex;
+    align-items: center;
+    min-block-size: calc(var(--spacing) * 11);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+    border-radius: var(--radius-control);
+    color: var(--color-text-secondary);
+    font-size: var(--text-small);
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .navigation-links a[aria-current='page'] {
+    color: var(--color-text-primary);
+  }
+
+  .navigation-links a:hover {
+    background-color: var(--color-surface);
+    color: var(--color-accent);
+  }
+
+  .menu-line {
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    transform-origin: center;
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .menu-line--first {
+    transform: translateY(-4px);
+  }
+
+  .menu-line--last {
+    transform: translateY(4px);
+  }
+
+  .site-header :global([aria-expanded='true']) .menu-line--first {
+    transform: rotate(45deg);
+  }
+
+  .site-header :global([aria-expanded='true']) .menu-line--last {
+    transform: rotate(-45deg);
+  }
+
+  @media (min-width: 48rem) {
+    .identity-row {
+      flex-basis: auto;
+      flex-grow: 0;
+    }
+
+    nav {
+      flex: 0 1 auto;
+      padding-block: 0;
+      border-block-start: 0;
+    }
+
+    .navigation-links {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: calc(var(--spacing) * 2);
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'>;
+
+const { class: className, ...attributes } = Astro.props;
+---
+
+<div {...attributes} class:list={['surface', className]}>
+  <slot />
+</div>
+
+<style>
+  .surface {
+    min-inline-size: 0;
+    padding: var(--spacing-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-surface);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-surface);
+  }
+</style>

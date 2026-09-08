@@ -1,0 +1,72 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectDetailLayout from '../components/ProjectDetailLayout.astro';
+import { experience } from '../data/experience';
+
+export async function getStaticPaths() {
+  if (import.meta.env.PROD) {
+    return [];
+  }
+
+  const projects = await getCollection('projects');
+  
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content, headings } = await render(project);
+
+const exp = experience.find(e => e.project === project.data.title);
+
+const meta = {
+  type: project.data.category === 'professional' ? 'Professional / Team project' : project.data.category,
+  company: exp?.company,
+  client: exp?.clientDescription,
+  role: project.data.roles.length > 0 ? project.data.roles.join(', ') : '',
+  status: project.data.projectStatus === 'production' ? 'In production' : project.data.projectStatus,
+  periods: exp?.periods
+};
+---
+
+<BaseLayout title={`[DRAFT] ${project.data.title}`} description={project.data.summary} noindex={true}>
+  <div class="draft-banner">
+    <p><strong>Draft preview — not included in production.</strong></p>
+  </div>
+  
+  <ProjectDetailLayout project={project} headings={headings} meta={meta}>
+    <Content />
+  </ProjectDetailLayout>
+</BaseLayout>
+
+<style>
+  .draft-banner {
+    background-color: var(--color-accent-strong);
+    color: var(--color-on-accent);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    text-align: center;
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  // Modify back link behavior in dev mode to return to /dev/projects
+  document.addEventListener('DOMContentLoaded', () => {
+    const backLink = document.querySelector('.project-detail__footer a.back-link');
+    if (backLink) {
+      backLink.setAttribute('href', '/dev/projects/');
+      backLink.innerHTML = `<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false"><path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>Back to preview index`;
+    }
+    
+    // Breadcrumb updates
+    const breadcrumbLinks = document.querySelectorAll('.project-detail__breadcrumb a');
+    if (breadcrumbLinks.length >= 2) {
+      breadcrumbLinks[1].setAttribute('href', '/dev/projects/');
+      breadcrumbLinks[1].textContent = 'Preview Projects';
+    }
+  });
+</script>

@@ -1,0 +1,53 @@
+---
+import Container from './Container.astro';
+import Section from './Section.astro';
+import SectionHeading from './SectionHeading.astro';
+import { profile } from '../data/profile';
+---
+
+<Section id="about" tabindex="-1" aria-labelledby="about-heading" class="border-t border-border-subtle">
+  <Container>
+    <div class="about__layout">
+      <div class="about__header">
+        <SectionHeading id="about-heading" title={profile.about.heading} eyebrow={profile.about.eyebrow} level="h2" />
+      </div>
+      <div class="about__content type-body">
+        {profile.about.paragraphs.map(paragraph => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .about__layout {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 8);
+  }
+
+  .about__content {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
+    color: var(--color-text-secondary);
+  }
+
+  @media (min-width: 48rem) {
+    .about__layout {
+      flex-direction: row;
+      gap: calc(var(--spacing) * 12);
+    }
+
+    .about__header {
+      flex: 1 1 40%;
+      min-inline-size: 0;
+    }
+
+    .about__content {
+      flex: 1 1 60%;
+      min-inline-size: 0;
+    }
+  }
+</style>

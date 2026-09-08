@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Section from '../../components/Section.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getPublishedProjects } from '../../lib/projects';
+import { profile } from '../../data/profile';
+import { withBase } from '../../lib/urls';
+
+const projects = await getPublishedProjects();
+
+const categories = new Set(projects.map(p => p.data.category));
+const showFilter = categories.size > 1;
+
+const availableCategories = ['professional', 'personal', 'freelance'].filter(cat => categories.has(cat as any));
+---
+
+<BaseLayout title={`Projects — ${profile.name}`} description="Professional work and personal projects across backend, web, and mobile development.">
+  <Section class="projects-page">
+    <Container>
+      <div class="projects-page__header">
+        <a href={withBase('')} class="projects-page__back type-small">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Back to home
+        </a>
+        <h1 class="type-h1 projects-page__title">Projects</h1>
+        <p class="type-body projects-page__description">Professional work and personal projects across backend, web, and mobile development.</p>
+      </div>
+
+      {projects.length > 0 ? (
+        <div class="projects-page__content">
+          {showFilter && (
+            <projects-filter class="projects-filter">
+              <div class="projects-filter__controls" role="group" aria-label="Filter projects by category" hidden>
+                <button class="projects-filter__btn type-small" aria-pressed="true" data-filter="all">All</button>
+                {availableCategories.map(cat => (
+                  <button class="projects-filter__btn type-small" aria-pressed="false" data-filter={cat}>
+                    <span class="projects-filter__btn-label">{cat}</span>
+                  </button>
+                ))}
+              </div>
+              <div class="sr-only" aria-live="polite" data-filter-announcer></div>
+            </projects-filter>
+          )}
+
+          <div class="projects-page__grid" data-projects-grid>
+            {projects.map((project, index) => (
+              <div class="projects-page__grid-item" data-category={project.data.category}>
+                <ProjectCard project={project} headingLevel="h2" lazyLoadCover={index > 3} />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div class="projects-page__empty">
+          <p class="type-body text-text-muted">No published projects are available at this time.</p>
+        </div>
+      )}
+    </Container>
+  </Section>
+</BaseLayout>
+
+<script>
+  class ProjectsFilter extends HTMLElement {
+    connectedCallback() {
+      const controls = this.querySelector<HTMLElement>('.projects-filter__controls');
+      const buttons = this.querySelectorAll<HTMLButtonElement>('.projects-filter__btn');
+      const grid = document.querySelector<HTMLElement>('[data-projects-grid]');
+      const announcer = this.querySelector<HTMLElement>('[data-filter-announcer]');
+      
+      if (!controls || !grid || !announcer || buttons.length === 0) return;
+
+      const items = grid.querySelectorAll<HTMLElement>('.projects-page__grid-item');
+      
+      // Reveal the controls since JS is available
+      controls.hidden = false;
+
+      const setFilter = (category: string, focusTarget?: HTMLButtonElement) => {
+        let visibleCount = 0;
+
+        items.forEach(item => {
+          const itemCategory = item.getAttribute('data-category');
+          const isVisible = category === 'all' || category === itemCategory;
+          item.hidden = !isVisible;
+          if (isVisible) visibleCount++;
+        });
+
+        buttons.forEach(btn => {
+          btn.setAttribute('aria-pressed', String(btn.getAttribute('data-filter') === category));
+        });
+
+        announcer.textContent = `Showing ${visibleCount} project${visibleCount === 1 ? '' : 's'}.`;
+        
+        if (focusTarget) {
+          focusTarget.focus();
+        }
+      };
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter');
+          if (filter) setFilter(filter, btn);
+        });
+      });
+    }
+  }
+
+  if (!customElements.get('projects-filter')) {
+    customElements.define('projects-filter', ProjectsFilter);
+  }
+</script>
+
+<style>
+  .projects-page {
+    padding-block-start: calc(var(--spacing) * 8);
+    padding-block-end: calc(var(--spacing) * 16);
+  }
+
+  .projects-page__header {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
+    margin-block-end: calc(var(--spacing) * 12);
+  }
+
+  .projects-page__back {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 1);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    margin-block-end: calc(var(--spacing) * 2);
+  }
+
+  .projects-page__back:hover {
+    color: var(--color-text-primary);
+  }
+
+  .projects-page__back svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .projects-page__title {
+    color: var(--color-text-primary);
+  }
+
+  .projects-page__description {
+    color: var(--color-text-secondary);
+    max-inline-size: 65ch;
+  }
+
+  .projects-filter {
+    display: block;
+    margin-block-end: calc(var(--spacing) * 8);
+  }
+
+  .projects-filter__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .projects-filter__controls[hidden] {
+    display: none;
+  }
+
+  .projects-filter__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: calc(var(--spacing) * 10);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+  
+  .projects-filter__btn-label {
+    text-transform: capitalize;
+  }
+
+  .projects-filter__btn:hover {
+    background-color: var(--color-surface-elevated);
+    color: var(--color-text-primary);
+  }
+
+  .projects-filter__btn[aria-pressed="true"] {
+    background-color: var(--color-accent-strong);
+    border-color: var(--color-accent-strong);
+    color: var(--color-on-accent);
+  }
+
+  .projects-page__grid {
+    display: grid;
+    gap: calc(var(--spacing) * 8);
+  }
+  
+  .projects-page__grid-item[hidden] {
+    display: none;
+  }
+
+  @media (min-width: 48rem) {
+    .projects-page {
+      padding-block-start: calc(var(--spacing) * 12);
+      padding-block-end: calc(var(--spacing) * 20);
+    }
+    
+    .projects-page__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .projects-page__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>

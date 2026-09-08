@@ -1,0 +1,423 @@
+---
+import Badge from '../components/Badge.astro';
+import Button from '../components/Button.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Surface from '../components/Surface.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// astro.config.mjs registers this route only when running the development server.
+
+const colors = [
+  { label: 'Background', token: '--color-background' },
+  { label: 'Surface', token: '--color-surface' },
+  { label: 'Surface elevated', token: '--color-surface-elevated' },
+  { label: 'Border subtle', token: '--color-border-subtle' },
+  { label: 'Border interactive', token: '--color-border-interactive' },
+  { label: 'Text primary', token: '--color-text-primary' },
+  { label: 'Text secondary', token: '--color-text-secondary' },
+  { label: 'Text muted', token: '--color-text-muted' },
+  { label: 'Accent', token: '--color-accent' },
+  { label: 'Accent strong', token: '--color-accent-strong' },
+  { label: 'Accent hover', token: '--color-accent-hover' },
+  { label: 'On accent', token: '--color-on-accent' },
+  { label: 'Primary action hover', token: '--color-action-primary-hover' },
+  { label: 'Focus ring', token: '--color-focus-ring' },
+] as const;
+
+const tokens = [
+  '--font-sans',
+  '--spacing',
+  '--spacing-gutter',
+  '--spacing-section',
+  '--spacing-surface',
+  '--container-main',
+  '--container-narrow',
+  '--container-prose',
+  '--radius-control',
+  '--radius-surface',
+  '--radius-pill',
+  '--shadow-surface',
+  '--shadow-accent',
+  '--duration-fast',
+  '--duration-normal',
+] as const;
+
+const typeSamples = [
+  { label: 'Display', className: 'type-display', text: 'Ideas into software.' },
+  { label: 'Heading 1', className: 'type-h1', text: 'Clear and considered.' },
+  { label: 'Heading 2', className: 'type-h2', text: 'Built around the content.' },
+  { label: 'Heading 3', className: 'type-h3', text: 'Room for the details.' },
+  { label: 'Body', className: 'type-body', text: 'Comfortable reading starts with clear type and generous line spacing.' },
+  { label: 'Small', className: 'type-small', text: 'Supporting details should remain easy to read.' },
+  { label: 'Eyebrow', className: 'type-eyebrow', text: 'Component demonstration' },
+] as const;
+
+const variants = ['primary', 'secondary', 'ghost'] as const;
+---
+
+<BaseLayout
+  title="Design system preview | Ridho Pujiono"
+  description="Development preview of the portfolio's visual foundations and reusable components."
+  noindex
+>
+  <Section aria-labelledby="preview-heading">
+    <Container>
+      <SectionHeading
+        id="preview-heading"
+        level="h1"
+        eyebrow="Development only"
+        title="Design system"
+        description="A working reference for colors, typography, spacing, and interface components. All examples below are component demonstrations."
+      />
+      <p class="preview-intro type-small">
+        This preview is excluded from the production build.{' '}
+        <a href="#button-examples">Explore button examples</a>{' '}or{' '}
+        <a href="#responsive-grid">inspect the responsive grid</a>.
+      </p>
+    </Container>
+  </Section>
+
+  <Section class="preview-section" aria-labelledby="colors-heading">
+    <Container>
+      <SectionHeading
+        id="colors-heading"
+        eyebrow="01 / Foundation"
+        title="Color and tokens"
+        description="Semantic variables connect the palette to the interface. Values below come from the active stylesheet."
+      />
+      <ul class="palette-grid preview-content" role="list">
+        {colors.map(({ label, token }) => (
+          <li class="palette-item">
+            <div class="color-swatch" style={{ backgroundColor: `var(${token})` }} aria-hidden="true" />
+            <p class="palette-label">{label}</p>
+            <code class="token-name">{token}</code>
+            <span class="token-value type-small" data-token-value={token} />
+          </li>
+        ))}
+      </ul>
+
+      <h3 class="type-h3 preview-subheading">Layout, shape, and timing</h3>
+      <dl class="token-list">
+        {tokens.map((token) => (
+          <div>
+            <dt><code>{token}</code></dt>
+            <dd><code data-token-value={token}>var({token})</code></dd>
+          </div>
+        ))}
+      </dl>
+    </Container>
+  </Section>
+
+  <Section class="preview-section" aria-labelledby="type-heading">
+    <Container>
+      <SectionHeading
+        id="type-heading"
+        eyebrow="02 / Typography"
+        title="A type scale with room to breathe"
+        description="One font family, fluid headings, and readable body text. These samples demonstrate visual styles without changing the page's heading hierarchy."
+      />
+      <div class="type-samples preview-content">
+        {typeSamples.map(({ label, className, text }) => (
+          <div class="type-sample">
+            <span class="type-small text-text-muted">{label}</span>
+            <p class={className}>{text}</p>
+          </div>
+        ))}
+      </div>
+    </Container>
+    <Container width="narrow" class="preview-narrow">
+      <h3 class="type-h2">A deliberately long heading that should wrap comfortably on even the smallest screens</h3>
+      <p class="preview-paragraph">
+        This narrow container demonstrates longer reading material. Paragraphs have a comfortable
+        line length and enough space between lines to make the text easy to follow. An{' '}
+        <a href="#surface-examples">inline link to the surface example</a>{' '}remains distinguishable
+        from the surrounding words. Select a sentence to inspect the selection colors, or use
+        the keyboard to follow the link and inspect its focus indicator.
+      </p>
+      <p class="type-small text-text-muted">Demonstration of the narrow container and long-form text width.</p>
+    </Container>
+  </Section>
+
+  <Section id="button-examples" class="preview-section" aria-labelledby="buttons-heading">
+    <Container>
+      <SectionHeading
+        id="buttons-heading"
+        eyebrow="03 / Interaction"
+        title="Actions and navigation"
+        description="Action buttons update the demonstration message. Navigation links move to an existing section. Tab through the examples to inspect keyboard focus."
+      />
+      <div class="button-examples preview-content">
+        {variants.map((variant) => (
+          <div class="button-example-row">
+            <h3 class="type-small button-variant-label">{variant}</h3>
+            <div class="button-group">
+              <Button variant={variant} data-demo={`${variant} default button activated.`}>
+                Run {variant} demo
+              </Button>
+              <Button variant={variant} size="small" data-demo={`${variant} small button activated.`}>
+                Small {variant}
+              </Button>
+              <Button variant={variant} disabled>Disabled {variant}</Button>
+            </div>
+          </div>
+        ))}
+        <div class="button-example-row">
+          <h3 class="type-small button-variant-label">Navigation</h3>
+          <div class="button-group">
+            <Button href="#responsive-grid">
+              View grid example
+              <svg slot="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" focusable="false">
+                <path d="M12 4v16m-6-6 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </Button>
+            <Button href="#colors-heading" variant="secondary" size="small">Back to colors</Button>
+            <Button href="#type-heading" variant="ghost">View typography</Button>
+          </div>
+        </div>
+      </div>
+      <p id="demo-feedback" class="demo-feedback type-small" role="status" aria-live="polite" aria-atomic="true">
+        Ready for a button demonstration.
+      </p>
+    </Container>
+  </Section>
+
+  <Section id="surface-examples" class="preview-section" aria-labelledby="surfaces-heading">
+    <Container>
+      <SectionHeading
+        id="surfaces-heading"
+        eyebrow="04 / Components"
+        title="Quiet visual boundaries"
+        description="Badges describe content; surfaces group the details that need a shared boundary. Neither implies an interaction."
+      />
+      <div class="badge-examples preview-content" aria-label="Badge demonstrations">
+        <Badge>Category example</Badge>
+        <Badge>Technology example</Badge>
+        <Badge variant="accent">Status example</Badge>
+      </div>
+      <Surface class="surface-example">
+        <h3 class="type-h3">Surface demonstration</h3>
+        <p class="preview-paragraph">
+          A simple background, subtle border, and consistent padding are enough to separate
+          related content. This example grows with its text and has no fixed content height.
+        </p>
+        <Badge variant="accent">Component example</Badge>
+      </Surface>
+    </Container>
+  </Section>
+
+  <Section id="responsive-grid" class="preview-section" aria-labelledby="grid-heading">
+    <Container>
+      <SectionHeading
+        id="grid-heading"
+        eyebrow="05 / Layout"
+        title="A grid that follows the space"
+        description="This demonstration uses one column on small screens, two at medium widths, and three on wide screens. The content determines each item's height."
+      />
+      <div class="responsive-grid preview-content">
+        <div class="grid-example">
+          <p class="type-eyebrow">Example 01</p>
+          <h3 class="type-h3">A short item</h3>
+          <p>Just enough text to show the basic spacing.</p>
+        </div>
+        <div class="grid-example">
+          <p class="type-eyebrow">Example 02</p>
+          <h3 class="type-h3">An item with a longer title that naturally wraps</h3>
+          <p>Longer content remains visible as the layout changes. Nothing relies on fixed card heights.</p>
+        </div>
+        <div class="grid-example">
+          <p class="type-eyebrow">Example 03</p>
+          <h3 class="type-h3">Room to expand</h3>
+          <p>These are layout examples, not portfolio projects or achievements.</p>
+          <a href="#preview-heading">Return to the preview introduction</a>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Inline keeps preview-only behavior out of the production asset bundle. -->
+  <script is:inline>
+    const rootStyles = getComputedStyle(document.documentElement);
+
+    document.querySelectorAll('[data-token-value]').forEach((element) => {
+      if (!(element instanceof HTMLElement)) return;
+      const token = element.dataset.tokenValue;
+      if (!token) return;
+      const value = rootStyles.getPropertyValue(token).trim();
+      element.textContent = value || `var(${token})`;
+    });
+
+    let activationCount = 0;
+    const feedback = document.getElementById('demo-feedback');
+    document.querySelectorAll('button[data-demo]').forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+      button.addEventListener('click', () => {
+        if (!feedback) return;
+        activationCount += 1;
+        feedback.textContent = `${button.dataset.demo} Demonstration ${activationCount}.`;
+      });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .preview-intro,
+  .preview-paragraph,
+  .badge-examples,
+  .surface-example {
+    margin-block-start: calc(var(--spacing) * 6);
+  }
+
+  .preview-section {
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  .preview-content,
+  .preview-subheading,
+  .preview-narrow {
+    margin-block-start: calc(var(--spacing) * 10);
+  }
+
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: calc(var(--spacing) * 6);
+    padding: 0;
+    list-style: none;
+  }
+
+  .palette-item,
+  .type-sample,
+  .grid-example {
+    min-width: 0;
+  }
+
+  .color-swatch {
+    height: calc(var(--spacing) * 18);
+    margin-block-end: calc(var(--spacing) * 3);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-control);
+  }
+
+  .palette-label {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  .token-name,
+  .token-value {
+    display: block;
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .token-name,
+  .token-list code {
+    font-size: 0.8125rem;
+  }
+
+  .token-list {
+    margin-block-start: calc(var(--spacing) * 5);
+  }
+
+  .token-list > div {
+    display: grid;
+    gap: calc(var(--spacing) * 2) calc(var(--spacing) * 6);
+    padding-block: calc(var(--spacing) * 3);
+    border-block-end: 1px solid var(--color-border-subtle);
+  }
+
+  .token-list dt,
+  .token-list dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .token-list dd {
+    color: var(--color-text-secondary);
+  }
+
+  .type-samples {
+    display: grid;
+    gap: calc(var(--spacing) * 8);
+  }
+
+  .type-sample {
+    display: grid;
+    gap: calc(var(--spacing) * 3);
+  }
+
+  .preview-paragraph {
+    max-width: var(--container-prose);
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+
+  .button-examples {
+    display: grid;
+    gap: calc(var(--spacing) * 6);
+  }
+
+  .button-example-row {
+    display: grid;
+    gap: calc(var(--spacing) * 3);
+  }
+
+  .button-variant-label {
+    text-transform: capitalize;
+  }
+
+  .button-group,
+  .badge-examples {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--spacing) * 3);
+  }
+
+  .demo-feedback {
+    min-height: 3.5em;
+    margin-block-start: calc(var(--spacing) * 6);
+    color: var(--color-text-secondary);
+  }
+
+  .surface-example {
+    max-width: var(--container-narrow);
+  }
+
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--spacing) * 8);
+  }
+
+  .grid-example {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--spacing) * 4);
+    border-block-start: 1px solid var(--color-border-subtle);
+    padding-block-start: calc(var(--spacing) * 6);
+  }
+
+  @media (min-width: 40rem) {
+    .token-list > div {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .responsive-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .type-sample {
+      grid-template-columns: 7rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+
+    .responsive-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

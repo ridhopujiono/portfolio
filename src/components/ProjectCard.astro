@@ -1,0 +1,263 @@
+---
+import type { Project } from '../lib/projects';
+import { Image } from 'astro:assets';
+import Badge from './Badge.astro';
+
+interface Props {
+  project: Project;
+  headingLevel?: 'h2' | 'h3';
+  lazyLoadCover?: boolean;
+}
+
+const { project, headingLevel: Heading = 'h3', lazyLoadCover = true } = Astro.props;
+const { data, id } = project;
+
+const statusLabels: Record<string, string> = {
+  planned: 'Planned',
+  'in-progress': 'In progress',
+  production: 'In production',
+  completed: 'Completed',
+};
+
+const statusLabel = data.projectStatus !== 'unknown' ? statusLabels[data.projectStatus] : null;
+const titleHref = data.detailPageReady ? `/projects/${id}/` : undefined;
+---
+
+<article class="project-card">
+  <div class="project-card__cover-wrapper">
+    {data.cover ? (
+      <Image
+        src={data.cover}
+        alt={data.coverAlt || ''}
+        class="project-card__cover"
+        loading={lazyLoadCover ? 'lazy' : 'eager'}
+      />
+    ) : (
+      <div class="project-card__cover-fallback" aria-hidden="true">
+        <span class="project-card__fallback-text">{data.title.substring(0, 2).toUpperCase()}</span>
+      </div>
+    )}
+  </div>
+
+  <div class="project-card__content">
+    <div class="project-card__header">
+      <span class="type-small project-card__category">{data.category}</span>
+      <Heading class="type-h3 project-card__title">
+        {data.detailPageReady ? (
+          <a href={titleHref} class="project-card__title-link">{data.title}</a>
+        ) : (
+          data.title
+        )}
+      </Heading>
+    </div>
+
+    <p class="type-body project-card__summary">{data.summary}</p>
+    
+    <div class="project-card__meta">
+      <div class="project-card__roles">
+        <strong class="type-small">Role:</strong>
+        <span class="type-small project-card__role-text">{data.roles.join(', ')}</span>
+      </div>
+      
+      <ul class="project-card__technologies" role="list">
+        {data.technologies.map(tech => (
+          <li><span class="project-card__tech type-small">{tech}</span></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="project-card__footer">
+      <div class="project-card__status-and-links">
+        {statusLabel && <Badge>{statusLabel}</Badge>}
+        
+        <div class="project-card__links">
+          {data.demoUrl && (
+            <a href={data.demoUrl.toString()} class="type-small project-card__external-link" target="_blank" rel="noopener noreferrer">Live site</a>
+          )}
+          {data.repositoryUrl && (
+            <a href={data.repositoryUrl.toString()} class="type-small project-card__external-link" target="_blank" rel="noopener noreferrer">Source code</a>
+          )}
+        </div>
+      </div>
+      
+      {data.detailPageReady && (
+        <a href={titleHref} class="type-body project-card__cta">
+          Read case study
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+            <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-surface);
+    overflow: hidden;
+  }
+
+  .project-card__cover-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-surface-elevated);
+    border-block-end: 1px solid var(--color-border-subtle);
+  }
+
+  .project-card__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-card__cover-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-surface-elevated);
+    color: var(--color-border-subtle);
+  }
+
+  .project-card__fallback-text {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-border-interactive);
+  }
+
+  .project-card__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: calc(var(--spacing) * 5) calc(var(--spacing) * 6);
+    gap: calc(var(--spacing) * 4);
+  }
+
+  .project-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 1);
+  }
+
+  .project-card__category {
+    text-transform: capitalize;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .project-card__title {
+    color: var(--color-text-primary);
+  }
+
+  .project-card__title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .project-card__title-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .project-card__summary {
+    color: var(--color-text-secondary);
+  }
+
+  .project-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 3);
+    margin-block-start: auto;
+    padding-block: calc(var(--spacing) * 4);
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  .project-card__roles {
+    color: var(--color-text-secondary);
+  }
+  
+  .project-card__roles strong {
+    color: var(--color-text-primary);
+  }
+
+  .project-card__technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .project-card__tech {
+    color: var(--color-text-muted);
+  }
+
+  .project-card__tech:not(:last-child)::after {
+    content: "·";
+    margin-inline-start: calc(var(--spacing) * 2);
+    color: var(--color-border-subtle);
+  }
+
+  .project-card__footer {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
+    margin-block-start: calc(var(--spacing) * 4);
+  }
+
+  .project-card__status-and-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--spacing) * 4);
+  }
+
+  .project-card__links {
+    display: flex;
+    gap: calc(var(--spacing) * 4);
+  }
+
+  .project-card__external-link {
+    color: var(--color-text-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-weight: 500;
+  }
+
+  .project-card__external-link:hover {
+    color: var(--color-accent);
+  }
+  
+  .project-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 1);
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+    margin-block-start: calc(var(--spacing) * 2);
+  }
+
+  .project-card__cta:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .project-card__cta svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .project-card__cta:hover svg {
+    transform: translateX(4px);
+  }
+</style>

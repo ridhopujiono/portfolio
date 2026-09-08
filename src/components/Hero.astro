@@ -1,0 +1,253 @@
+---
+import Container from './Container.astro';
+import Section from './Section.astro';
+import Button from './Button.astro';
+import { hero } from '../data/hero';
+import { site } from '../data/site';
+import { withBase } from '../lib/urls';
+import { getPublicCvUrl, getPublicSocialLinks } from '../lib/public-assets';
+
+const cvUrl = getPublicCvUrl(site.cvPath);
+const socialLinks = getPublicSocialLinks(site.socialLinks);
+---
+
+<Section aria-labelledby="hero-heading" class="hero">
+  <Container>
+    <div class="hero__layout">
+      <div class="hero__copy">
+        <p class="type-eyebrow hero__eyebrow">{hero.eyebrow}</p>
+        <h1 id="hero-heading" class="type-display hero__heading">
+          <span class="hero__greeting">{hero.greeting} </span>
+          <span class="hero__name">{hero.name}.</span>
+        </h1>
+        <p class="hero__headline">{hero.supportingHeadline}</p>
+        <p class="type-body hero__description">{hero.description}</p>
+
+        <div class="hero__actions">
+          <Button href={withBase(hero.primaryCta.target)} class="hero__cta">
+            <svg slot="icon" viewBox="0 0 20 20" fill="none" focusable="false">
+              <path d="M10 3.5v13m-5-5 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {hero.primaryCta.label}
+          </Button>
+          {cvUrl && (
+            <Button href={cvUrl} variant="secondary" download class="hero__cta">
+              {hero.cvLabel}
+            </Button>
+          )}
+        </div>
+
+        {socialLinks.length > 0 && (
+          <ul class="hero__social-links type-small" role="list">
+            {socialLinks.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}
+          </ul>
+        )}
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <svg class="hero__diagram" viewBox="0 0 430 340" fill="none" focusable="false">
+          <path class="hero__connector" d="M122 120v38a12 12 0 0 0 12 12h31M270 222v46a12 12 0 0 1-12 12h-16" />
+          <path class="hero__guide" d="M369 68h-31a12 12 0 0 0-12 12v44M70 281H40a12 12 0 0 1-12-12v-37" />
+
+          <rect class="hero__plane" x="28" y="16" width="190" height="104" rx="14" />
+          <g class="hero__symbol" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="48" y="36" width="26" height="9" rx="2" />
+            <rect x="48" y="50" width="26" height="9" rx="2" />
+            <path d="M53 40.5h.1M53 54.5h.1M65 40.5h4M65 54.5h4" />
+          </g>
+          <text class="hero__label" x="48" y="94">{hero.visualLabels.backend}</text>
+          <circle class="hero__dot" cx="197" cy="37" r="3" />
+
+          <rect class="hero__plane hero__plane--web" x="165" y="124" width="208" height="98" rx="14" />
+          <g class="hero__symbol" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="185" y="144" width="27" height="23" rx="3" />
+            <path d="M185 151h27M193 151v16" />
+          </g>
+          <text class="hero__label" x="185" y="200">{hero.visualLabels.web}</text>
+          <circle class="hero__dot" cx="352" cy="145" r="3" />
+
+          <rect class="hero__plane" x="70" y="239" width="172" height="86" rx="14" />
+          <g class="hero__symbol" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="91" y="266" width="16" height="29" rx="3" />
+            <path d="M96 270h6M98 291h2" />
+          </g>
+          <text class="hero__label" x="123" y="287">{hero.visualLabels.mobile}</text>
+          <circle class="hero__dot" cx="221" cy="260" r="3" />
+
+          <circle class="hero__junction" cx="122" cy="120" r="3" />
+          <circle class="hero__junction" cx="270" cy="222" r="3" />
+          <circle class="hero__dot hero__dot--quiet" cx="369" cy="68" r="3" />
+          <circle class="hero__dot hero__dot--quiet" cx="28" cy="232" r="3" />
+        </svg>
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .hero__layout {
+    display: grid;
+    align-items: center;
+    gap: calc(var(--spacing) * 8);
+  }
+
+  .hero__copy {
+    min-inline-size: 0;
+  }
+
+  .hero__eyebrow {
+    margin-block-end: calc(var(--spacing) * 5);
+    color: var(--color-text-secondary);
+  }
+
+  .hero__heading {
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  }
+
+  .hero__greeting {
+    display: block;
+  }
+
+  .hero__name {
+    color: var(--color-accent);
+  }
+
+  .hero__headline {
+    max-inline-size: 31ch;
+    margin-block-start: calc(var(--spacing) * 7);
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    text-wrap: pretty;
+  }
+
+  .hero__description {
+    max-inline-size: 57ch;
+    margin-block-start: calc(var(--spacing) * 4);
+    color: var(--color-text-secondary);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 3);
+    margin-block-start: calc(var(--spacing) * 8);
+  }
+
+  .hero__social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 2) calc(var(--spacing) * 5);
+    margin-block-start: calc(var(--spacing) * 5);
+  }
+
+  .hero__social-links a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: calc(var(--spacing) * 11);
+  }
+
+  .hero__visual {
+    inline-size: min(100%, 14rem);
+    aspect-ratio: 430 / 340;
+    margin-inline: auto;
+  }
+
+  .hero__diagram {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .hero__plane {
+    fill: var(--color-surface);
+    stroke: var(--color-border-subtle);
+  }
+
+  .hero__plane--web {
+    fill: var(--color-surface-elevated);
+    stroke: var(--color-accent);
+    stroke-opacity: 0.45;
+  }
+
+  .hero__connector {
+    stroke: var(--color-accent);
+    stroke-opacity: 0.55;
+  }
+
+  .hero__guide {
+    stroke: var(--color-border-subtle);
+  }
+
+  .hero__symbol {
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+  }
+
+  .hero__label {
+    fill: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__dot {
+    fill: var(--color-accent);
+  }
+
+  .hero__dot--quiet {
+    fill: var(--color-text-muted);
+  }
+
+  .hero__junction {
+    fill: var(--color-surface);
+    stroke: var(--color-accent);
+  }
+
+  @media (min-width: 64rem) {
+    .hero__layout {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: calc(var(--spacing) * 10);
+    }
+
+    .hero__visual {
+      inline-size: 100%;
+      max-inline-size: 30rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__copy,
+    .hero__visual {
+      animation: hero-enter var(--duration-normal) var(--ease-standard) both;
+    }
+
+    .hero__actions :global(.hero__cta) {
+      transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard),
+        transform var(--duration-fast) var(--ease-standard);
+    }
+
+    @media (hover: hover) {
+      .hero__actions :global(.hero__cta:hover) {
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  @keyframes hero-enter {
+    from {
+      opacity: 0.8;
+      transform: translateY(calc(var(--spacing) * 2));
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -1,0 +1,156 @@
+---
+import Container from './Container.astro';
+import Section from './Section.astro';
+import SectionHeading from './SectionHeading.astro';
+import { experience } from '../data/experience';
+
+const exp = experience[0];
+---
+
+<Section id="experience" tabindex="-1" aria-labelledby="experience-heading" class="border-t border-border-subtle">
+  <Container>
+    <SectionHeading id="experience-heading" title="Experience" level="h2" />
+
+    <div class="experience__layout">
+      <div class="experience__metadata">
+        <h3 class="type-h3 experience__role">{exp.role}</h3>
+        <p class="type-body experience__company">{exp.company}</p>
+        <p class="type-small experience__scope">{exp.scopeLabel}</p>
+        
+        <div class="experience__project-info">
+          <p class="type-body experience__project">{exp.project}</p>
+          <p class="type-small experience__client">{exp.clientDescription}</p>
+        </div>
+
+        <ul class="experience__periods type-small" role="list">
+          {exp.periods.map(period => (
+            <li>
+              <strong>{period.label}:</strong> {period.period}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="experience__details">
+        <p class="type-body experience__summary">{exp.summary}</p>
+        
+        <ul class="experience__contributions" role="list">
+          {exp.contributions.map(contribution => (
+            <li class="experience__contribution-item">
+              <strong class="experience__contribution-title">{contribution.title}:</strong>
+              <span class="type-body experience__contribution-desc">{contribution.description}</span>
+            </li>
+          ))}
+        </ul>
+        
+        <p class="type-body experience__team-note">{exp.teamNote}</p>
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .experience__layout {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 8);
+    margin-block-start: calc(var(--spacing) * 10);
+  }
+
+  .experience__metadata {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .experience__role {
+    color: var(--color-text-primary);
+  }
+
+  .experience__company {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .experience__scope {
+    color: var(--color-accent);
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+
+  .experience__project-info {
+    margin-block-end: calc(var(--spacing) * 4);
+  }
+
+  .experience__project {
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  .experience__client {
+    color: var(--color-text-muted);
+  }
+
+  .experience__periods {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 1);
+    color: var(--color-text-secondary);
+  }
+
+  .experience__periods strong {
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .experience__details {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 6);
+  }
+
+  .experience__summary {
+    color: var(--color-text-secondary);
+  }
+
+  .experience__contributions {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
+  }
+
+  .experience__contribution-item {
+    color: var(--color-text-secondary);
+  }
+
+  .experience__contribution-title {
+    display: block;
+    color: var(--color-text-primary);
+    font-weight: 500;
+    margin-block-end: calc(var(--spacing) * 1);
+  }
+
+  .experience__team-note {
+    margin-block-start: calc(var(--spacing) * 2);
+    padding-block-start: calc(var(--spacing) * 4);
+    border-block-start: 1px solid var(--color-border-subtle);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  @media (min-width: 48rem) {
+    .experience__layout {
+      flex-direction: row;
+      gap: calc(var(--spacing) * 12);
+    }
+
+    .experience__metadata {
+      flex: 1 1 35%;
+      min-inline-size: 0;
+    }
+
+    .experience__details {
+      flex: 1 1 65%;
+      min-inline-size: 0;
+    }
+  }
+</style>

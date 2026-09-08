@@ -1,0 +1,86 @@
+---
+import Container from './Container.astro';
+import Section from './Section.astro';
+import SectionHeading from './SectionHeading.astro';
+import ProjectCard from './ProjectCard.astro';
+import Button from './Button.astro';
+import { getFeaturedProjects, getPublishedProjects } from '../lib/projects';
+import { withBase } from '../lib/urls';
+
+let projects = await getFeaturedProjects();
+if (projects.length === 0) {
+  const published = await getPublishedProjects();
+  projects = published.slice(0, 3);
+} else {
+  projects = projects.slice(0, 3);
+}
+
+const description = "A selection of professional work and personal projects, with a focus on practical software and clear contributions.";
+---
+
+<Section id="projects" tabindex="-1" aria-labelledby="projects-heading" class="border-t border-border-subtle">
+  <Container>
+    <div class="selected-projects__header">
+      <SectionHeading id="projects-heading" title="Systems I’ve contributed to and built." eyebrow="SELECTED WORK" level="h2" description={description} />
+      
+      <div class="selected-projects__view-all">
+        <Button href={withBase('/projects/')} variant="secondary">View all projects</Button>
+      </div>
+    </div>
+
+    {projects.length > 0 ? (
+      <div class={`selected-projects__grid selected-projects__grid--${projects.length}`}>
+        {projects.map((project, index) => (
+          <ProjectCard project={project} headingLevel="h3" lazyLoadCover={index > 0} />
+        ))}
+      </div>
+    ) : (
+      <p class="type-body text-text-muted mt-8">No projects available to display.</p>
+    )}
+  </Container>
+</Section>
+
+<style>
+  .selected-projects__header {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 6);
+  }
+
+  .selected-projects__view-all {
+    margin-block-start: calc(var(--spacing) * 4);
+  }
+
+  .selected-projects__grid {
+    display: grid;
+    gap: calc(var(--spacing) * 6);
+    margin-block-start: calc(var(--spacing) * 12);
+  }
+
+  @media (min-width: 48rem) {
+    .selected-projects__header {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .selected-projects__view-all {
+      margin-block-start: 0;
+      flex-shrink: 0;
+    }
+
+    .selected-projects__grid--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .selected-projects__grid--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .selected-projects__grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

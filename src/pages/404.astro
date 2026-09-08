@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/Button.astro';
+import { withBase } from '../lib/urls';
+---
+
+<BaseLayout title="Page Not Found" description="The page you are looking for does not exist." noindex={true}>
+  <Section class="not-found">
+    <Container class="not-found-container">
+      <h1 class="type-display not-found-title">404</h1>
+      <p class="type-body not-found-desc">
+        We can't seem to find the page you're looking for. It might have been removed, renamed, or didn't exist in the first place.
+      </p>
+      
+      <div class="not-found-actions">
+        <Button href={withBase('/')} variant="primary">Back to home</Button>
+        <Button href={withBase('/projects/')} variant="secondary">View projects</Button>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: calc(var(--spacing) * 20);
+    min-block-size: 60vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--spacing) * 6);
+  }
+
+  .not-found-title {
+    color: var(--color-accent);
+  }
+
+  .not-found-desc {
+    max-inline-size: 50ch;
+    color: var(--color-text-secondary);
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 4);
+    margin-block-start: calc(var(--spacing) * 2);
+  }
+</style>

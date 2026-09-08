@@ -1,0 +1,232 @@
+---
+import Section from './Section.astro';
+import Container from './Container.astro';
+import SectionHeading from './SectionHeading.astro';
+import Button from './Button.astro';
+import { site } from '../data/site';
+
+const hasContactChannels = Boolean(
+  site.contactEmail || site.socialLinks.github || site.socialLinks.linkedin || site.whatsappNumber
+);
+
+const { contactEmail, socialLinks, whatsappNumber } = site;
+---
+
+{hasContactChannels && (
+  <Section id="contact" class="contact-section">
+    <Container class="contact-container">
+      <div class="contact-content">
+        <SectionHeading 
+          id="contact-heading"
+          title="Let's talk about your project." 
+          eyebrow="CONTACT" 
+          description="Have a question about my work or a project in mind? You can reach me through the channels below."
+        />
+      </div>
+      
+      <div class="contact-channels">
+        {contactEmail && (
+          <div class="email-channel">
+            <h3 class="type-body font-semibold mb-2">Email</h3>
+            <div class="email-actions">
+              <Button href={`mailto:${contactEmail}?subject=Project%20Inquiry`} variant="primary">
+                Email me
+              </Button>
+              <button 
+                type="button" 
+                class="copy-button type-small" 
+                data-copy-email={contactEmail}
+                aria-label="Copy email address"
+              >
+                Copy email
+              </button>
+            </div>
+            <div 
+              aria-live="polite" 
+              class="copy-status type-small" 
+              data-copy-status
+            ></div>
+          </div>
+        )}
+        
+        {(socialLinks.github || socialLinks.linkedin || whatsappNumber) && (
+          <div class="social-channels">
+            <h3 class="type-body font-semibold mb-4">On the web</h3>
+            <ul class="social-list" role="list">
+              {socialLinks.github && (
+                <li>
+                  <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" class="social-link type-body">
+                    GitHub
+                  </a>
+                </li>
+              )}
+              {socialLinks.linkedin && (
+                <li>
+                  <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="social-link type-body">
+                    LinkedIn
+                  </a>
+                </li>
+              )}
+              {whatsappNumber && (
+                <li>
+                  <a href={`https://wa.me/${whatsappNumber}?text=Hi%20Ridho%2C%20I%E2%80%99d%20like%20to%20discuss%20a%20project.`} target="_blank" rel="noopener noreferrer" class="social-link type-body">
+                    WhatsApp
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+    </Container>
+  </Section>
+)}
+
+<style>
+  .contact-section {
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  .contact-container {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 8);
+  }
+
+  .contact-content {
+    max-inline-size: 55ch;
+  }
+
+  .contact-channels {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 8);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-surface);
+    padding: calc(var(--spacing) * 6) calc(var(--spacing) * 6);
+  }
+
+  .email-channel {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .email-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--spacing) * 4);
+  }
+
+  .copy-button {
+    background: transparent;
+    border: 1px solid var(--color-border-interactive);
+    color: var(--color-text-primary);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+  
+  .copy-button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  
+  .copy-button[hidden] {
+    display: none;
+  }
+
+  .copy-status {
+    color: var(--color-text-secondary);
+    min-block-size: 1.5rem;
+  }
+
+  .social-channels {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 1);
+  }
+
+  .social-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 3);
+  }
+
+  .social-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  
+  .social-link:hover, .social-link:focus-visible {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (min-width: 64rem) {
+    .contact-container {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    
+    .contact-content {
+      flex: 1 1 50%;
+    }
+    
+    .contact-channels {
+      flex: 1 1 40%;
+      min-inline-size: 20rem;
+      padding: calc(var(--spacing) * 10);
+    }
+  }
+</style>
+
+<script>
+  // Setup copy to clipboard functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyBtns = document.querySelectorAll<HTMLButtonElement>('[data-copy-email]');
+    
+    // Only show copy buttons if clipboard API is available
+    if (!navigator.clipboard) {
+      copyBtns.forEach(btn => {
+        btn.hidden = true;
+      });
+      return;
+    }
+
+    copyBtns.forEach(btn => {
+      const email = btn.getAttribute('data-copy-email');
+      const statusContainer = btn.parentElement?.nextElementSibling as HTMLElement;
+      
+      btn.addEventListener('click', async () => {
+        if (!email) return;
+        
+        try {
+          await navigator.clipboard.writeText(email);
+          if (statusContainer) {
+            statusContainer.textContent = 'Copied to clipboard.';
+            statusContainer.style.color = 'var(--color-text-primary)';
+            setTimeout(() => {
+              if (statusContainer.textContent === 'Copied to clipboard.') {
+                statusContainer.textContent = '';
+              }
+            }, 3000);
+          }
+        } catch (err) {
+          if (statusContainer) {
+            statusContainer.textContent = 'Failed to copy. Please copy manually.';
+            statusContainer.style.color = 'var(--color-accent)';
+          }
+        }
+      });
+    });
+  });
+</script>
