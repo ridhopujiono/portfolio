@@ -28,31 +28,24 @@ The platform supports agricultural field operations through a web application an
     <rect x="40" y="80" width="140" height="40" rx="8" fill="var(--color-surface-elevated)" stroke="var(--color-accent)" stroke-width="2"/>
     <text x="110" y="105" text-anchor="middle" fill="var(--color-text-primary)" font-size="14" font-weight="600">Web App</text>
     <text x="110" y="135" text-anchor="middle" fill="var(--color-text-secondary)" font-size="11">Management & Reporting</text>
-    
     <!-- Connector Web <-> Backend -->
     <path d="M180 100 L250 100" stroke="var(--color-border-interactive)" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow-start)"/>
-
     <!-- Backend -->
     <rect x="250" y="80" width="140" height="40" rx="8" fill="var(--color-surface-elevated)" stroke="var(--color-accent-strong)" stroke-width="2"/>
     <text x="320" y="105" text-anchor="middle" fill="var(--color-text-primary)" font-size="14" font-weight="600">Backend API</text>
     <text x="320" y="135" text-anchor="middle" fill="var(--color-text-secondary)" font-size="11">Business Rules & Shared Data</text>
-
     <!-- Connector Backend <-> Mobile -->
     <path d="M390 100 L460 100" stroke="var(--color-border-interactive)" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow-start)"/>
-
     <!-- Mobile -->
     <rect x="460" y="40" width="120" height="40" rx="8" fill="var(--color-surface-elevated)" stroke="var(--color-accent)" stroke-width="2"/>
     <text x="520" y="65" text-anchor="middle" fill="var(--color-text-primary)" font-size="14" font-weight="600">Mobile App</text>
     <text x="520" y="95" text-anchor="middle" fill="var(--color-text-secondary)" font-size="11">Field Workflows</text>
-
     <!-- Connector Mobile <-> SQLite -->
     <path d="M520 80 L520 120" stroke="var(--color-border-interactive)" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow-start)"/>
-
     <!-- SQLite -->
     <rect x="460" y="120" width="120" height="40" rx="8" fill="var(--color-surface-elevated)" stroke="var(--color-border-subtle)" stroke-width="2"/>
     <text x="520" y="145" text-anchor="middle" fill="var(--color-text-primary)" font-size="14" font-weight="600">Local SQLite</text>
     <text x="520" y="175" text-anchor="middle" fill="var(--color-text-secondary)" font-size="11">Local Records & Sync</text>
-    
     <!-- Definitions for arrows -->
     <defs>
       <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
