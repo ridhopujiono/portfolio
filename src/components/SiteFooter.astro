@@ -6,7 +6,7 @@ import { getPublicCvUrl } from '../lib/public-assets';
 
 const currentYear = new Date().getFullYear();
 const { socialLinks } = site;
-const hasSocial = Boolean(socialLinks.github || socialLinks.linkedin);
+const hasSocial = Boolean(socialLinks.github || socialLinks.linkedin || socialLinks.instagram || socialLinks.threads);
 const cvUrl = getPublicCvUrl(site.cvPath);
 ---
 
@@ -49,6 +49,16 @@ const cvUrl = getPublicCvUrl(site.cvPath);
               {socialLinks.linkedin && (
                 <li>
                   <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="type-small footer-link">LinkedIn</a>
+                </li>
+              )}
+              {socialLinks.instagram && (
+                <li>
+                  <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="type-small footer-link">Instagram</a>
+                </li>
+              )}
+              {socialLinks.threads && (
+                <li>
+                  <a href={socialLinks.threads} target="_blank" rel="noopener noreferrer" class="type-small footer-link">Threads</a>
                 </li>
               )}
             </ul>
