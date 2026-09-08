@@ -6,7 +6,7 @@ import Button from './Button.astro';
 import { site } from '../data/site';
 
 const hasContactChannels = Boolean(
-  site.contactEmail || site.socialLinks.github || site.socialLinks.linkedin || site.whatsappNumber
+  site.contactEmail || site.socialLinks.github || site.socialLinks.linkedin || site.socialLinks.instagram || site.socialLinks.threads || site.whatsappNumber
 );
 
 const { contactEmail, socialLinks, whatsappNumber } = site;
@@ -49,7 +49,7 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
           </div>
         )}
         
-        {(socialLinks.github || socialLinks.linkedin || whatsappNumber) && (
+        {(socialLinks.github || socialLinks.linkedin || socialLinks.instagram || socialLinks.threads || whatsappNumber) && (
           <div class="social-channels">
             <h3 class="type-body font-semibold mb-4">On the web</h3>
             <ul class="social-list" role="list">
@@ -64,6 +64,20 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
                 <li>
                   <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="social-link type-body">
                     LinkedIn
+                  </a>
+                </li>
+              )}
+              {socialLinks.instagram && (
+                <li>
+                  <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="social-link type-body">
+                    Instagram
+                  </a>
+                </li>
+              )}
+              {socialLinks.threads && (
+                <li>
+                  <a href={socialLinks.threads} target="_blank" rel="noopener noreferrer" class="social-link type-body">
+                    Threads
                   </a>
                 </li>
               )}
