@@ -8,7 +8,7 @@ import { withBase } from '../lib/urls';
 import { getPublicCvUrl, getPublicSocialLinks } from '../lib/public-assets';
 
 const cvUrl = getPublicCvUrl(site.cvPath);
-const socialLinks = getPublicSocialLinks(site.socialLinks);
+const socialLinks = getPublicSocialLinks(site);
 ---
 
 <Section aria-labelledby="hero-heading" class="hero">
@@ -36,12 +36,6 @@ const socialLinks = getPublicSocialLinks(site.socialLinks);
             </Button>
           )}
         </div>
-
-        {socialLinks.length > 0 && (
-          <ul class="hero__social-links type-small" role="list">
-            {socialLinks.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}
-          </ul>
-        )}
       </div>
 
       <div class="hero__visual" aria-hidden="true">
@@ -133,19 +127,6 @@ const socialLinks = getPublicSocialLinks(site.socialLinks);
     flex-wrap: wrap;
     gap: calc(var(--spacing) * 3);
     margin-block-start: calc(var(--spacing) * 8);
-  }
-
-  .hero__social-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacing) * 2) calc(var(--spacing) * 5);
-    margin-block-start: calc(var(--spacing) * 5);
-  }
-
-  .hero__social-links a {
-    display: inline-flex;
-    align-items: center;
-    min-block-size: calc(var(--spacing) * 11);
   }
 
   .hero__visual {
