@@ -32,21 +32,25 @@ export function getPublicCvUrl(cvPath: string | null): string | null {
 }
 
 export interface PublicSocialLink {
-  label: 'GitHub' | 'LinkedIn';
+  label: 'GitHub' | 'LinkedIn' | 'Instagram' | 'Threads' | 'Email' | 'WhatsApp';
   href: string;
 }
 
-export function getPublicSocialLinks(links: SiteData['socialLinks']): PublicSocialLink[] {
+export function getPublicSocialLinks(site: SiteData): PublicSocialLink[] {
   const candidates: [PublicSocialLink['label'], string | null][] = [
-    ['GitHub', links.github],
-    ['LinkedIn', links.linkedin],
+    ['GitHub', site.socialLinks.github],
+    ['LinkedIn', site.socialLinks.linkedin],
+    ['Instagram', site.socialLinks.instagram],
+    ['Threads', site.socialLinks.threads],
+    ['Email', site.contactEmail ? `mailto:${site.contactEmail}` : null],
+    ['WhatsApp', site.whatsappNumber ? `https://wa.me/${site.whatsappNumber}` : null],
   ];
 
   return candidates.flatMap(([label, value]) => {
     if (!value?.trim()) return [];
     try {
       const url = new URL(value);
-      if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return [];
+      if (!['https:', 'http:', 'mailto:', 'whatsapp:'].includes(url.protocol) || url.username || url.password) return [];
       return [{ label, href: url.href }];
     } catch {
       return [];
