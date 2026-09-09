@@ -1,0 +1,210 @@
+---
+---
+
+<theme-toggle class="theme-toggle">
+  <button
+    type="button"
+    class="theme-toggle-switch"
+    role="switch"
+    aria-checked="false"
+    aria-label="Toggle theme"
+  >
+    <span class="switch-track">
+      <span class="switch-icon switch-icon-left">
+        <svg class="moon-icon-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </span>
+      <span class="switch-icon switch-icon-right">
+        <svg class="sun-icon-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </span>
+      <span class="switch-thumb">
+        <svg class="sun-icon-thumb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon-thumb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </span>
+    </span>
+  </button>
+</theme-toggle>
+
+<script>
+  class ThemeToggleElement extends HTMLElement {
+    connectedCallback() {
+      const button = this.querySelector('button');
+      if (!button) return;
+
+      // Initialize state based on HTML attribute
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      this.updateAria(isLight);
+
+      button.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('theme', nextTheme);
+        this.updateAria(nextTheme === 'light');
+      });
+    }
+
+    updateAria(isLight: boolean) {
+      const button = this.querySelector('button');
+      if (button) {
+        button.setAttribute('aria-checked', String(isLight));
+      }
+    }
+  }
+
+  if (!customElements.get('theme-toggle')) {
+    customElements.define('theme-toggle', ThemeToggleElement);
+  }
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .theme-toggle-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    outline-offset: 4px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .switch-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 3.5rem; /* 56px */
+    height: 1.75rem; /* 28px */
+    background-color: var(--color-surface-elevated);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    transition: background-color var(--duration-normal) var(--ease-standard), border-color var(--duration-normal) var(--ease-standard);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .theme-toggle-switch:hover .switch-track {
+    border-color: var(--color-border-interactive);
+  }
+
+  .switch-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    color: var(--color-text-muted);
+    transition: color var(--duration-normal) var(--ease-standard);
+  }
+
+  .switch-icon-left {
+    left: 0;
+    padding-left: 2px;
+  }
+
+  .switch-icon-right {
+    right: 0;
+    padding-right: 2px;
+  }
+
+  .switch-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .switch-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(1.75rem - 6px); /* 22px */
+    height: calc(1.75rem - 6px); /* 22px */
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    border-radius: 50%;
+    transition: transform var(--duration-normal) cubic-bezier(0.4, 0.0, 0.2, 1), background-color var(--duration-normal) var(--ease-standard);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .theme-toggle-switch:hover .switch-thumb {
+    background-color: var(--color-accent-hover);
+  }
+
+  .switch-thumb svg {
+    width: 12px;
+    height: 12px;
+    transition: transform var(--duration-normal) var(--ease-standard), opacity var(--duration-normal) var(--ease-standard);
+    position: absolute;
+  }
+
+  /* Default (Dark Mode) */
+  .switch-thumb {
+    transform: translateX(0); /* Left */
+  }
+  .sun-icon-thumb {
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+  }
+  .moon-icon-thumb {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  
+  /* Light Mode */
+  :global(html[data-theme="light"]) .switch-thumb {
+    transform: translateX(1.75rem); /* Right (56px - 28px) */
+    background-color: var(--color-accent-strong);
+  }
+  :global(html[data-theme="light"]) .sun-icon-thumb {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  :global(html[data-theme="light"]) .moon-icon-thumb {
+    opacity: 0;
+    transform: scale(0.5) rotate(45deg);
+  }
+
+  /* Highlight icons on track when active */
+  :global(html[data-theme="light"]) .switch-icon-right {
+    color: var(--color-text-primary);
+  }
+  :global(html[data-theme="dark"]) .switch-icon-left,
+  :global(html:not([data-theme="light"])) .switch-icon-left {
+    color: var(--color-text-primary);
+  }
+</style>

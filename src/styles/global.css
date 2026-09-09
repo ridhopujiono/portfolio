@@ -64,6 +64,23 @@
   --focus-offset: 3px;
 }
 
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-background: #ffffff;
+  --color-surface: #f4f4f7;
+  --color-surface-elevated: #ffffff;
+  --color-border-subtle: #e5e5eb;
+  --color-border-interactive: #9292a5;
+  --color-text-primary: #101014;
+  --color-text-secondary: #30303c;
+  --color-text-muted: #77778b;
+  --color-accent: #7c3aed;
+  --color-accent-strong: #6d28d9;
+  --color-accent-hover: #8b5cf6;
+  --color-on-accent: #ffffff;
+  --color-action-primary-hover: #5b21b6;
+}
+
 @media (min-width: 48rem) {
   :root {
     --site-header-height: 5.0625rem;

@@ -25,6 +25,12 @@ const projects = defineCollection({
       endDate: yearMonth.optional(),
       cover: image().optional(),
       coverAlt: nonEmptyText.optional(),
+      previews: z.array(
+        z.object({
+          src: image(),
+          alt: nonEmptyText,
+        })
+      ).optional(),
       demoUrl: publicUrl.optional(),
       repositoryUrl: publicUrl.optional(),
     }).superRefine((project, context) => {

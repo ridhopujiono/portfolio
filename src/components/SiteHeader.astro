@@ -3,6 +3,7 @@ import Button from './Button.astro';
 import Container from './Container.astro';
 import { homeHref, navigation } from '../data/navigation';
 import { profile } from '../data/profile';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <site-header class="site-header">
@@ -10,7 +11,9 @@ import { profile } from '../data/profile';
     <Container class="header-container">
       <div class="identity-row">
         <a class="site-identity" href={homeHref} data-site-identity>{profile.name}</a>
-        <Button
+        <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+          <ThemeToggle />
+          <Button
           variant="secondary"
           size="small"
           class="navigation-toggle"
@@ -26,6 +29,7 @@ import { profile } from '../data/profile';
           </svg>
           Menu
         </Button>
+        </div>
       </div>
 
       <nav id="primary-navigation" aria-label="Primary navigation">

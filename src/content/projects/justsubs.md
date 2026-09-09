@@ -3,9 +3,9 @@ title: JustSubs
 summary: A reusable Laravel package and administration dashboard intended for subscription management.
 category: personal
 projectStatus: in-progress
-publicationStatus: draft
+publicationStatus: published
 featured: false
-detailPageReady: false
+detailPageReady: true
 sortOrder: 2
 roles: []
 technologies:
