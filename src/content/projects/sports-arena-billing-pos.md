@@ -1,9 +1,9 @@
 ---
 title: Sports Arena Billing & POS
-summary: A conceptual billing system incorporating ESP32 hardware and MQTT communication.
+summary: A conceptual billing system. It incorporates ESP32 hardware and MQTT communication.
 category: personal
 projectStatus: planned
-publicationStatus: draft
+publicationStatus: published
 featured: false
 detailPageReady: false
 sortOrder: 6

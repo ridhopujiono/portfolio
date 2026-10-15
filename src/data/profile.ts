@@ -24,9 +24,8 @@ export const profile: ProfileData = {
     eyebrow: 'ABOUT',
     heading: 'Backend-focused. Comfortable across the stack.',
     paragraphs: [
-      'I’m Ridho, a software engineer based in Tuban, Indonesia. My work spans Laravel backends, React web interfaces, and React Native mobile applications.',
-      'Through Mandatech Mataram Mukti, I contribute to a field management platform for agricultural operations. My work includes activity planning, water management, field records, and the data synchronisation that connects web and mobile workflows.',
-      'I’m particularly interested in the practical details that make these systems useful: clear business rules, reliable background processing, and mobile workflows that remain usable when connectivity is limited.'
+      'I enjoy building reliable systems across the stack. While my core expertise lies in developing robust Laravel backends, I frequently work with React and React Native to deliver cohesive web and mobile experiences.',
+      'I’m particularly interested in the practical details that make software useful in the real world: clear business rules, reliable background processing, and building mobile workflows that remain fully functional even when connectivity is limited.'
     ]
   }
 };

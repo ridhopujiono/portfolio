@@ -1,20 +1,37 @@
 ---
+import { Image } from 'astro:assets';
 import Container from './Container.astro';
 import Section from './Section.astro';
 import SectionHeading from './SectionHeading.astro';
 import { profile } from '../data/profile';
+import profileImage from '../assets/images/profile/ridho-portrait.jpg';
 ---
 
-<Section id="about" tabindex="-1" aria-labelledby="about-heading" class="border-t border-border-subtle">
+<Section id="about" tabindex="-1" aria-labelledby="about-heading" class="border-t border-border-subtle reveal">
   <Container>
     <div class="about__layout">
       <div class="about__header">
         <SectionHeading id="about-heading" title={profile.about.heading} eyebrow={profile.about.eyebrow} level="h2" />
+        <div class="about__image-wrapper">
+          <div class="about__image-frame">
+            <div class="about__image-inner">
+              <Image 
+                src={profileImage} 
+                alt={`Portrait of ${profile.name}`}
+                class="about__image"
+                width={320}
+              />
+            </div>
+            <span class="about__image-dot" aria-hidden="true"></span>
+          </div>
+        </div>
       </div>
-      <div class="about__content type-body">
-        {profile.about.paragraphs.map(paragraph => (
-          <p>{paragraph}</p>
-        ))}
+      <div class="about__content">
+        <div class="about__text type-body">
+          {profile.about.paragraphs.map(paragraph => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
       </div>
     </div>
   </Container>
@@ -27,11 +44,77 @@ import { profile } from '../data/profile';
     gap: calc(var(--spacing) * 8);
   }
 
+  .about__header {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 8);
+  }
+
   .about__content {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 8);
+  }
+
+  .about__text {
     display: flex;
     flex-direction: column;
     gap: calc(var(--spacing) * 4);
     color: var(--color-text-secondary);
+  }
+
+  .about__image-wrapper {
+    display: flex;
+  }
+
+  .about__image-frame {
+    position: relative;
+    display: inline-flex;
+    background-color: var(--color-surface);
+    border-radius: 1.25rem; /* 20px */
+    border: 1px solid var(--color-border-subtle);
+    padding: calc(var(--spacing) * 2);
+    box-shadow: var(--shadow-surface);
+  }
+
+  .about__image-inner {
+    position: relative;
+    border-radius: 1rem; /* 16px */
+    overflow: hidden;
+    display: flex;
+  }
+
+  .about__image {
+    display: block;
+    width: 100%;
+    max-width: 18rem; /* 288px */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center 20%;
+    opacity: 0.95;
+    transition: opacity var(--duration-normal) var(--ease-standard);
+  }
+
+  :global(html[data-theme="light"]) .about__image {
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .about__image-frame:hover .about__image {
+      opacity: 1;
+    }
+  }
+
+  .about__image-dot {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-background);
+    z-index: 2;
   }
 
   @media (min-width: 48rem) {

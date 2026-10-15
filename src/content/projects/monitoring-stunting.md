@@ -1,6 +1,6 @@
 ---
 title: Monitoring Stunting
-summary: A Laravel application focused on health monitoring, with deployment configured via Docker.
+summary: A Laravel application focused on health monitoring. It streamlines data collection and reporting for health workers.
 category: professional
 projectStatus: unknown
 publicationStatus: draft

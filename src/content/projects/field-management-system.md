@@ -1,11 +1,12 @@
 ---
 title: Field Management System
-summary: A web and mobile platform supporting agricultural field operations — covering location management, activity planning, water management, dynamic forms, offline field records, and operational analytics.
+summary: A web and mobile platform supporting agricultural field operations. It helps teams plan activities and manage resources efficiently.
 category: professional
 projectStatus: production
 publicationStatus: published
 featured: true
 detailPageReady: true
+isConfidential: true
 sortOrder: 1
 roles:
   - Backend, Web & Mobile Development
@@ -23,6 +24,8 @@ technologies:
 ---
 
 ## Overview
+
+> **Confidentiality Note:** This is an internal private project. Some operational details, intellectual property, and client identities have been anonymized or omitted to comply with Non-Disclosure Agreement (NDA) requirements.
 
 The Field Management System (FMS) is a full-stack agricultural operations platform. It serves field workers, agronomists, QC teams, and management through two clients: a web application for planning, reporting, and configuration, and a mobile app for on-site field workflows. The backend provides shared business logic, APIs, scheduled jobs, and event-driven notifications that serve both surfaces. The mobile app supports offline usage with a local SQLite database that synchronizes with the server when connectivity is restored.
 
@@ -76,7 +79,7 @@ The system covers a wide operational scope: location master data, seasonal activ
 
 ## My Role
 
-I contribute through **Mandatech Mataram Mukti** as part of a cross-functional development team. My work spans Laravel backend services, React/Mantine web interfaces, and React Native mobile features. Contributions are focused on specific modules and workflows within a larger team-built system, collaborating closely with other developers. I also provide guidance and support to junior developers on the team.
+I contributed through **Mandatech Mataram Mukti** as part of a cross-functional development team. My work spanned Laravel backend services, React/Mantine web interfaces, and React Native mobile features. Contributions were focused on specific modules and workflows within a larger team-built system, collaborating closely with other developers. I also provided guidance and support to junior developers on the team.
 
 ---
 

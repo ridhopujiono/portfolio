@@ -13,7 +13,7 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
 ---
 
 {hasContactChannels && (
-  <Section id="contact" class="contact-section">
+  <Section id="contact" class="contact-section reveal">
     <Container class="contact-container">
       <div class="contact-content">
         <SectionHeading 
@@ -27,7 +27,8 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
       <div class="contact-channels">
         {contactEmail && (
           <div class="email-channel">
-            <h3 class="type-body font-semibold mb-2">Email</h3>
+            <h3 class="type-body font-semibold mb-1">Email</h3>
+            <p class="type-body text-color-secondary mb-3">{contactEmail}</p>
             <div class="email-actions">
               <Button href={`mailto:${contactEmail}?subject=Project%20Inquiry`} variant="primary">
                 Email me
@@ -38,7 +39,7 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
                 data-copy-email={contactEmail}
                 aria-label="Copy email address"
               >
-                Copy email
+                Copy
               </button>
             </div>
             <div 
@@ -51,7 +52,7 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
         
         {(socialLinks.github || socialLinks.linkedin || socialLinks.instagram || socialLinks.threads || whatsappNumber) && (
           <div class="social-channels">
-            <h3 class="type-body font-semibold mb-4">On the web</h3>
+            <h3 class="type-body font-semibold mb-3">On the web</h3>
             <ul class="social-list" role="list">
               {socialLinks.github && (
                 <li>
@@ -114,24 +115,28 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
   .contact-channels {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--spacing) * 8);
+    gap: calc(var(--spacing) * 6);
     background-color: var(--color-surface);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-surface);
-    padding: calc(var(--spacing) * 6) calc(var(--spacing) * 6);
+    padding: calc(var(--spacing) * 6);
   }
 
   .email-channel {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--spacing) * 2);
+    gap: calc(var(--spacing) * 1);
+  }
+  
+  .text-color-secondary {
+    color: var(--color-text-secondary);
   }
 
   .email-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: calc(var(--spacing) * 4);
+    gap: calc(var(--spacing) * 3);
   }
 
   .copy-button {
@@ -165,8 +170,8 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
   }
 
   .social-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: calc(var(--spacing) * 3);
   }
 
@@ -198,7 +203,7 @@ const { contactEmail, socialLinks, whatsappNumber } = site;
     .contact-channels {
       flex: 1 1 40%;
       min-inline-size: 20rem;
-      padding: calc(var(--spacing) * 10);
+      padding: calc(var(--spacing) * 8);
     }
   }
 </style>

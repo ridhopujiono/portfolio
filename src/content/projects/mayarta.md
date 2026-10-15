@@ -1,12 +1,14 @@
 ---
-title: Mayarta — Personal Finance Tracker
-summary: A mobile-first personal finance app with receipt OCR, manual transaction entry, budget alerts, and a rule-based Decision Support System for spending profile analysis.
+title: Mayarta (Personal Finance Tracker)
+summary: A mobile-first personal finance app. It helps users track expenses and analyze spending profiles.
 category: personal
 projectStatus: production
 publicationStatus: published
 featured: true
 detailPageReady: true
-sortOrder: 1
+sortOrder: 2
+cover: ../../assets/images/mayarta/Splash.png
+coverAlt: "Mayarta Cover"
 roles:
   - Full-Stack & Mobile Development
 technologies:
@@ -19,6 +21,35 @@ technologies:
   - MySQL
   - Redis
   - Laravel Horizon
+
+previews:
+  - src: ../../assets/images/mayarta/Splash.png
+    alt: "Splash Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Login.png
+    alt: "Login Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Beranda.png
+    alt: "Beranda Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Transaksi.png
+    alt: "Transaksi Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Detail Transaksi.jpg
+    alt: "Detail Transaksi Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Scan.png
+    alt: "Scan Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Edit Scan Sebelum Simpan.png
+    alt: "Edit Scan Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/DSS.png
+    alt: "DSS Profile Screen"
+    orientation: portrait
+  - src: ../../assets/images/mayarta/Akun.png
+    alt: "Akun Screen"
+    orientation: portrait
 ---
 
 ## Overview

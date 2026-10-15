@@ -18,6 +18,7 @@ const projects = defineCollection({
       publicationStatus: z.enum(['draft', 'published']).default('draft'),
       featured: z.boolean().default(false),
       detailPageReady: z.boolean().default(false),
+      isConfidential: z.boolean().default(false),
       sortOrder: z.number().int().nonnegative().default(100),
       roles: z.array(nonEmptyText),
       technologies: z.array(nonEmptyText),
@@ -29,6 +30,7 @@ const projects = defineCollection({
         z.object({
           src: image(),
           alt: nonEmptyText,
+          orientation: z.enum(['landscape', 'portrait']).default('landscape'),
         })
       ).optional(),
       demoUrl: publicUrl.optional(),

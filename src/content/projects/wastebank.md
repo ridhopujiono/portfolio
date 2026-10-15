@@ -1,12 +1,14 @@
 ---
 title: Waste Bank Management Platform
-summary: A full-stack web and mobile platform for managing waste bank operations — from waste deposits and balance withdrawals to financial reporting and multi-branch administration.
+summary: A full-stack platform for managing waste bank operations. It handles waste deposits, withdrawals, and financial reporting.
 category: professional
 projectStatus: production
 publicationStatus: published
 featured: true
 detailPageReady: true
-sortOrder: 2
+sortOrder: 3
+cover: ../../assets/images/wastebank/11-Splash.png
+coverAlt: "Waste Bank"
 roles:
   - Full-Stack Development (Backend, Web Dashboard & Mobile)
 technologies:
@@ -20,6 +22,41 @@ technologies:
   - Docker
   - DomPDF
   - Maatwebsite Excel
+
+previews:
+  - src: ../../assets/images/wastebank/11-Splash.png
+    alt: "Splash Screen"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/1-DashboardNasabah.png
+    alt: "Dashboard Nasabah (Mobile)"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/2-FormTarikSaldoDanPIN.png
+    alt: "Tarik Saldo & Verifikasi PIN"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/3-DashboardAdmin.png
+    alt: "Dashboard Admin (Mobile)"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/4-FormSetor(POS).png
+    alt: "Sistem Setor POS"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/5-PersetujuanPenarikan.png
+    alt: "Persetujuan Penarikan Saldo"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/6-Notifikasi.png
+    alt: "Push Notification"
+    orientation: portrait
+  - src: ../../assets/images/wastebank/7-DashboardWeb.png
+    alt: "Web Dashboard"
+    orientation: landscape
+  - src: ../../assets/images/wastebank/8-LaporanBukuKas.png
+    alt: "Laporan Buku Kas (Web)"
+    orientation: landscape
+  - src: ../../assets/images/wastebank/9-ManajemenNasabah.png
+    alt: "Manajemen Nasabah (Web)"
+    orientation: landscape
+  - src: ../../assets/images/wastebank/10-Nota-Pdf.png
+    alt: "Nota PDF"
+    orientation: landscape
 ---
 
 ## Overview

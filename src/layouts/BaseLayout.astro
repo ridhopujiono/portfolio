@@ -68,5 +68,31 @@ const jsonLd = {
       <slot />
     </main>
     <SiteFooter />
+
+    <script>
+      // Enable JS-dependent features (like scroll reveal animations)
+      document.documentElement.classList.add('js-enabled');
+
+      // Initialize scroll reveal observer
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Find and observe all reveal elements
+      document.querySelectorAll('.reveal').forEach(element => {
+        observer.observe(element);
+      });
+    </script>
   </body>
 </html>

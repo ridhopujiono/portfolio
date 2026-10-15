@@ -1,6 +1,6 @@
 ---
 title: School Attendance System
-summary: A conceptual attendance system integrating biometric hardware, local synchronization, and automated messaging.
+summary: A conceptual attendance system. It integrates biometric hardware with automated messaging.
 category: professional
 projectStatus: planned
 publicationStatus: draft

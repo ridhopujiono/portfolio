@@ -1,12 +1,12 @@
 ---
 title: Nginx Manager
-summary: A decoupled, security-first platform for managing Nginx reverse proxies and SSL certificates, built with a Go backend API and a Laravel dashboard UI.
+summary: A security-first platform for managing Nginx reverse proxies and SSL certificates. It features a Go backend API and a Laravel dashboard.
 category: personal
 projectStatus: production
 publicationStatus: published
 featured: true
 detailPageReady: true
-sortOrder: 1
+sortOrder: 4
 cover: ../../assets/images/nginx/page1.jpg
 coverAlt: "Nginx Manager Cover"
 roles:

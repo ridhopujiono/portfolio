@@ -13,7 +13,7 @@ import { skills, skillsHeading } from '../data/skills';
     
     <div class="skills__grid">
       {skills.map(group => (
-        <Surface class="skills__card">
+        <Surface class="skills__card reveal">
           <h3 class="type-h3 skills__group-name">{group.name}</h3>
           <p class="type-body skills__context">{group.context}</p>
           <ul class="skills__list" role="list">
@@ -37,16 +37,16 @@ import { skills, skillsHeading } from '../data/skills';
   .skills__card {
     display: flex;
     flex-direction: column;
-    padding: calc(var(--spacing) * 6);
+    padding: calc(var(--spacing) * 5);
   }
 
   .skills__group-name {
-    margin-block-end: calc(var(--spacing) * 2);
+    margin-block-end: calc(var(--spacing) * 1.5);
     color: var(--color-text-primary);
   }
 
   .skills__context {
-    margin-block-end: calc(var(--spacing) * 6);
+    margin-block-end: calc(var(--spacing) * 4);
     color: var(--color-text-secondary);
   }
 
