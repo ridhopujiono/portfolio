@@ -2,6 +2,7 @@
 import type { Project } from '../lib/projects';
 import { Image } from 'astro:assets';
 import Badge from './Badge.astro';
+import { withBase } from '../lib/urls';
 
 interface Props {
   project: Project;
@@ -21,7 +22,7 @@ const statusLabels: Record<string, string> = {
 };
 
 const statusLabel = data.projectStatus !== 'unknown' ? statusLabels[data.projectStatus] : null;
-const titleHref = data.detailPageReady ? `/projects/${id}/` : undefined;
+const titleHref = data.detailPageReady ? withBase(`/projects/${id}/`) : undefined;
 ---
 
 <article class={`project-card ${className || ''}`}>

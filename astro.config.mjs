@@ -3,7 +3,8 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://ridhopujiono.my.id',
+  site: 'https://ridhopujiono.github.io',
+  base: '/portfolio',
   output: 'static',
   integrations: [
     {

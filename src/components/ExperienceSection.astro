@@ -4,6 +4,7 @@ import Section from './Section.astro';
 import SectionHeading from './SectionHeading.astro';
 import Badge from './Badge.astro';
 import { experience } from '../data/experience';
+import { withBase } from '../lib/urls';
 ---
 
 <Section id="experience" tabindex="-1" aria-labelledby="experience-heading" class="border-t border-border-subtle reveal">
@@ -50,7 +51,7 @@ import { experience } from '../data/experience';
             <p class="type-body experience__team-note">{exp.teamNote}</p>
 
             {exp.cta && (
-              <a href={exp.cta.link} class="type-body experience__cta">
+              <a href={withBase(exp.cta.link)} class="type-body experience__cta">
                 {exp.cta.text}
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
                   <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
